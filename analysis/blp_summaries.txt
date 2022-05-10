@@ -1,0 +1,104 @@
+Problem Results Summary:
+=======================================================================================================
+GMM   Objective  Gradient      Hessian         Hessian     Clipped  Weighting Matrix  Covariance Matrix
+Step    Value      Norm    Min Eigenvalue  Max Eigenvalue  Shares   Condition Number  Condition Number 
+----  ---------  --------  --------------  --------------  -------  ----------------  -----------------
+ 2    +4.4E-19   +3.2E-09     -4.4E-02        +2.5E-02        0         +2.7E+11          +6.3E+21     
+=======================================================================================================
+
+Cumulative Statistics:
+===========================================================================
+Computation  Optimizer  Optimization   Objective   Fixed Point  Contraction
+   Time      Converged   Iterations   Evaluations  Iterations   Evaluations
+-----------  ---------  ------------  -----------  -----------  -----------
+ 00:00:44       Yes          0             4          4597         16497   
+===========================================================================
+
+Nonlinear Coefficient Estimates (Robust SEs in Parentheses):
+==================================
+  Sigma:      prices    csr_pay_94
+----------  ----------  ----------
+  prices     +1.0E+00             
+            (+1.4E+00)            
+                                  
+csr_pay_94   +0.0E+00    +1.0E+00 
+                        (+4.2E-01)
+==================================
+
+Beta Estimates (Robust SEs in Parentheses):
+======================================================================================
+    1         prices    act_value   MetalLevel_Silver  MetalLevel_Platinum   csr_tot  
+----------  ----------  ----------  -----------------  -------------------  ----------
+ -1.7E-01    -1.0E+00    -5.4E-01       +1.6E-02            +7.0E-03         -2.8E+03 
+(+6.0E-01)  (+1.3E+00)  (+7.5E-02)     (+3.4E-03)          (+1.5E-03)       (+5.8E-03)
+======================================================================================
+
+
+
+Problem Results Summary:
+=================================================================================
+GMM   Objective  Gradient            Clipped  Weighting Matrix  Covariance Matrix
+Step    Value      Norm    Hessian   Shares   Condition Number  Condition Number 
+----  ---------  --------  --------  -------  ----------------  -----------------
+ 2    +1.0E-21   +1.2E-08  -1.5E+15     0         +4.8E+11          +2.6E+23     
+=================================================================================
+
+Cumulative Statistics:
+===========================================================================
+Computation  Optimizer  Optimization   Objective   Fixed Point  Contraction
+   Time      Converged   Iterations   Evaluations  Iterations   Evaluations
+-----------  ---------  ------------  -----------  -----------  -----------
+ 00:00:40       Yes          0             4          10920        35618   
+===========================================================================
+
+Nonlinear Coefficient Estimates (Robust SEs in Parentheses):
+=====================
+ Sigma:    act_value 
+---------  ----------
+act_value   +1.0E+00 
+           (+2.0E-01)
+=====================
+
+Beta Estimates (Robust SEs in Parentheses):
+==========================================================================
+    1         prices    MetalLevel_Silver  MetalLevel_Platinum   csr_tot  
+----------  ----------  -----------------  -------------------  ----------
+ -1.6E+01    -1.4E+00       -3.3E-02            -2.7E-03         +3.3E+03 
+(+2.8E+00)  (+3.4E-01)     (+1.3E-02)          (+3.9E-03)       (+5.8E-03)
+==========================================================================
+
+
+Problem Results Summary:
+=======================================================================================================
+GMM   Objective  Gradient      Hessian         Hessian     Clipped  Weighting Matrix  Covariance Matrix
+Step    Value      Norm    Min Eigenvalue  Max Eigenvalue  Shares   Condition Number  Condition Number 
+----  ---------  --------  --------------  --------------  -------  ----------------  -----------------
+ 2    +4.3E-07   +3.1E-04     -6.3E-02        +1.2E-01        0         +6.0E+11          +1.1E+22     
+=======================================================================================================
+
+Cumulative Statistics:
+===========================================================================
+Computation  Optimizer  Optimization   Objective   Fixed Point  Contraction
+   Time      Converged   Iterations   Evaluations  Iterations   Evaluations
+-----------  ---------  ------------  -----------  -----------  -----------
+ 00:01:32       Yes          3            11          51842       162554   
+===========================================================================
+
+Nonlinear Coefficient Estimates (Robust SEs in Parentheses):
+==================================
+  Sigma:      prices    csr_pay_94
+----------  ----------  ----------
+  prices     +2.3E-01             
+            (+5.7E+00)            
+                                  
+csr_pay_94   +0.0E+00    +3.1E+01 
+                        (+5.1E+00)
+==================================
+
+Beta Estimates (Robust SEs in Parentheses):
+==========================================================================
+    1       act_value   MetalLevel_Silver  MetalLevel_Platinum   csr_tot  
+----------  ----------  -----------------  -------------------  ----------
+ -5.3E+00    -9.9E-01       -2.7E-03            +1.3E-03         +1.1E+04 
+(+3.4E+00)  (+2.3E-01)     (+9.0E-03)          (+3.6E-03)       (+1.9E-02)
+==========================================================================
