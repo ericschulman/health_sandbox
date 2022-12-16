@@ -12,11 +12,11 @@ from sklearn.model_selection import train_test_split
 ####### data setup ##############
 
 def read_bid_data(year):
-    name = 'data/BPT%s_data/ma_2.txt'%(year)
+    name = '../data/BPT%s_data/ma_2.txt'%(year)
     data_merge = pd.read_csv(name, on_bad_lines='skip',encoding = "ISO-8859-1",delimiter='\t')
     for i in [2,6]:#[1,2,3,5,6]:
         #5 is benchmk... to much about actual stuff...
-        name = 'data/BPT%s_data/ma_%s.txt'%(year,i)
+        name = '../data/BPT%s_data/ma_%s.txt'%(year,i)
         data = pd.read_csv(name, on_bad_lines='skip',encoding = "ISO-8859-1",delimiter='\t')
         data_merge = data_merge.merge(data)
     return data_merge
@@ -47,7 +47,7 @@ def clean_bid_data(df,
 
 
     #rename the columns:
-    data_dict =pd.read_excel('data/BPT2018_data/BPT2018_dictionary.xlsx',)
+    data_dict =pd.read_excel('../data/BPT2018_data/BPT2018_dictionary.xlsx',)
     data_dict = data_dict.rename(columns={'NAME':'features'})
     data_dict['features']
 
