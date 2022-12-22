@@ -4,7 +4,7 @@ This is an undocumented repository with statistical exercises exploring publicly
 * It is important to note that causal conclusions cannot be drawn from these exercises, as the techniques being explored are not explicitly designed for causal inference and are known to have issues with making causal conclusions.
 * Those interested in pre-merged files from CMS and exploring the predictive fit of machine learning techniques with publicly available data may find the code in this repository of interest.
 
-##`aca_mkt`
+## `aca_mkt`
 This contains code related to the ACA public market place. Much of this code was written in conjunction with Himani Verma as part of the University of Texas's undergraduate research fellowship program. 
 - `analysis`: exploration and regression analysis (boosted trees, logit, ols, iv) for 2016 and combined 2016-2017 data
 - `analysis_2017`: regression analysis (boosted trees, logit) on 2017 data
@@ -15,6 +15,6 @@ This contains code related to the ACA public market place. Much of this code was
 ## `medicare_adv`
 Many of the same techniques/code applied in the `aca_mkt` folder have been applied to publicly avaiable data on Medicare Advantage plans.
 
-##`ESRD`
+## `ESRD`
 Public data on medicare beneficiaries with end stage renal disease. The excersizes relate to geocoding locations to better understand the geographic distribution of anonymized data.
 
