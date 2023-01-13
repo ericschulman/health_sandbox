@@ -9,8 +9,44 @@ import statsmodels.api as sm
 
 from sklearn.model_selection import train_test_split
 
-####### data setup ##############
 
+
+##################################
+#### misc data utilities#####
+##############################
+
+def clean_x_data(df,exclude_cols):
+    
+    x_cols = []
+    x_cols_float = []
+    for col in df.columns:
+        right_type = (df[col].dtype == int) or (df[col].dtype == float)
+        if right_type and not (col in exclude_cols): 
+            col_var = df[col].var() 
+            if col_var > 0:
+                x_cols.append(col)
+                if df[col].max() > 10:
+                    x_cols_float.append(col)
+                
+    df_no_nas = df.copy()
+    df_no_nas = df_no_nas.replace([np.inf, -np.inf], np.nan)
+    df_no_nas = df_no_nas.replace(np.nan,0)
+    X = df_no_nas
+    X[x_cols_float] = X[x_cols_float].copy()/X[x_cols_float].copy().var()
+    return X[x_cols].astype(float)
+
+def train_test_pfold(X,y, num_trials = 5):
+    training_test = []
+    for i in range(num_trials):
+        test_size = 0.33
+        np.random.seed()
+        X_train, X_test, y_train, y_test = train_test_split(sm.add_constant(X), y, test_size=test_size)
+        training_test.append( (X_train, X_test, y_train, y_test) )
+    return training_test
+
+##########################################
+####### bid data setup ##############
+##########################################
 def read_bid_data(year):
     name = '../data/BPT%s_data/ma_2.txt'%(year)
     data_merge = pd.read_csv(name, on_bad_lines='skip',encoding = "ISO-8859-1",delimiter='\t')
@@ -22,30 +58,15 @@ def read_bid_data(year):
     return data_merge
 
 
+
+
 def clean_bid_data(df, 
     keys = ['bid_id','contract_year','allow_p0013','allow_q0013','version'],
     y_cols = ['allow_o0013']):
     
-
-    x_cols = []
-    for col in df.columns:
-        right_type = df[col].dtype == int or df[col].dtype == float
-        if right_type and col not in y_cols and col not in keys: 
-            col_var = df[col].var() 
-            if col_var > 0:
-                x_cols.append(col)
-
-    print(df.shape,len(x_cols))
-    #get rid of infs and nas
-    df_no_nas = df.copy()
-    df_no_nas = df_no_nas.replace([np.inf, -np.inf], np.nan)
-    df_no_nas = df_no_nas.replace(np.nan,0)
-
-    y = df_no_nas[y_cols]#[~na_rows]
-    X = df_no_nas[x_cols]#[~na_rows]
-    X = X/X.var()
-
-
+    X = clean_x_data(df,keys+y_cols)
+    y = df[y_cols]#[~na_rows]
+    
     #rename the columns:
     data_dict =pd.read_excel('../data/BPT2018_data/BPT2018_dictionary.xlsx',)
     data_dict = data_dict.rename(columns={'NAME':'features'})
@@ -59,24 +80,64 @@ def clean_bid_data(df,
     return y,X
 
 
-def train_test_pfold(X,y, num_trials = 5):
-    training_test = []
-    for i in range(num_trials):
-        test_size = 0.33
-        np.random.seed()
-        X_train, X_test, y_train, y_test = train_test_split(sm.add_constant(X), y, test_size=test_size)
-        training_test.append( (X_train, X_test, y_train, y_test) )
-    return training_test
+##########################################
+####### enroll data setup ##############
+##########################################
 
-########### visualization ###########
+def read_enroll_files(year,month):
+    name = '../data/Monthly_Report_By_Plan_%s_%s/Monthly_Report_By_Plan_%s_%s.csv'%(year,month,year,month)
+    file = open(name,'r',encoding = "ISO-8859-1")
+    lines = file.readlines()
+    
+    count = 0
+    end_loop = 0
+    
+    #iterate until we find the header
+    while end_loop == 0:    
+        if 'Contract' in lines[count] and 'Enrollment' in  lines[count]:
+            end_loop = 1
+        count += 1
+    file.close()
+    data = pd.read_csv(name,skiprows=count-1, on_bad_lines='skip',encoding = "ISO-8859-1")
+    return data
+
+
+def merge_enrollment_data(year):
+    year_file = read_enroll_files(year,'01')
+    for month in range(2,13):
+        #pad month name
+        month_name = str(month).zfill(2)
+        month_file = read_enroll_files(year,month_name)
+        year_file = pd.concat([year_file,month_file])
+    
+    #group by plan/bid
+    year_file['Year'] = year
+    year_file = year_file [~year_file['Plan ID'].isna()]
+    year_file = year_file [year_file['Enrollment']!='*']
+    year_file['Enrollment'] = year_file['Enrollment'].astype('int')
+    year_file['Plan ID'] = year_file['Plan ID'].apply(lambda x : str(int(x)).zfill(3) )
+    year_file_group = year_file.groupby(
+        ['Plan ID','Contract Number'],as_index=False).agg({'Enrollment':'sum','Organization Type':'first',
+                                                          'Plan Type':'first','Offers Part D':'first',
+                                                           'Organization Name':'first',
+                                         'Organization Marketing Name':'first','Plan Name':'first',
+                                         'Parent Organization':'first'})
+    
+    return year_file_group
+
+#########################################################
+############### ml stuff #########################3
+#######################################################
+
 
 def get_predictions(model,X_test):
     y_pred = model.predict(X_test)
     y_pred[y_pred < 0] = 0
     return np.array(y_pred).reshape(X_test.shape[0],1)
 
+
 def get_mse(y_pred,y_test):
-    share_test = np.array(y_test)
+    y_test = np.array(y_test).reshape(y_pred.shape)
     #ever enrolled count is column 0... want to weight mse by mkt size
     return (y_pred - y_test)**2
 
@@ -124,7 +185,6 @@ def run_lasso(a,training_test):
         X_train, X_test, y_train, y_test = training_test[j]
         lasso = sm.OLS(1000*y_train, X_train).fit_regularized(method='elastic_net', alpha=a, L1_wt=1.0)
         y_pred = get_predictions(lasso,X_test/1000)
-        
         mse = float( get_mse(y_pred,y_test).mean() )
         r2 = float( 1 - mse/y_test.var() ) 
         #print( 1 - r2 )
