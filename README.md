@@ -13,7 +13,7 @@ This contains code related to the ACA public market place. Much of this code was
 - `preprocess`: data pre-processing and merge of issuer and county characteristics 
 
 ## `medicare_adv`
-Many of the same techniques/code applied in the `aca_mkt` folder have been applied to publicly avaiable data on Medicare Advantage plans.
+Many of the same techniques/code applied in the `aca_mkt` folder have been applied to [publicly avaiable data](https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/DataFiles) on Medicare Advantage plans.
 
 ## `ESRD`
 Public data on medicare beneficiaries with end stage renal disease. The excersizes relate to geocoding locations to better understand the geographic distribution of anonymized data.
